@@ -10,7 +10,7 @@ use Zend\ModuleManager\Feature\ConfigProviderInterface;
 use Zend\Config\Config;
 use Zend\Mvc\MvcEvent;
 use Zend\ServiceManager\ServiceLocatorInterface;
-use ZF\OAuth2\Doctrine\Adapter\DoctrineAdapterFactory;
+use ZFNotification\Adapter\Factory\ZFNotificationAdapterFactory;
 
 class Module implements
     AutoloaderProviderInterface,
@@ -40,21 +40,27 @@ class Module implements
 
     public function onBootstrap(MvcEvent $e)
     {
-        /** @var ServiceLocatorInterface $serviceManager */
+        /** 
+         * @var ServiceLocatorInterface $serviceManager 
+         */
         $serviceManager = $e->getParam('application')->getServiceManager();
-        $serviceManager->get('oauth2.doctrineadapter.default')->bootstrap($e);
+        $serviceManager->get('ZFNotificationService')->bootstrap($e);
     }
 
     public function getServiceConfig()
     {
         return [
             'factories' => [
-                'oauth2.doctrineadapter.default' => function ($serviceManager) {
-                    /** @var ServiceLocatorInterface | ContainerInterface $serviceManager */
+                'ZFNotificationService' => function ($serviceManager) {
+                    /** 
+                     * @var ServiceLocatorInterface | ContainerInterface $serviceManager 
+                     */
                     $globalConfig = $serviceManager->get('Config');
-                    $config = new Config($globalConfig['zf-oauth2-doctrine']['default']);
-                    /** @var DoctrineAdapterFactory $factory */
-                    $factory = $serviceManager->get(DoctrineAdapterFactory::class);
+                    $config = new Config($globalConfig['zf-notification']['default']);
+                    /** 
+                     * @var ZFNotificationAdapterFactory $factory 
+                     */
+                    $factory = $serviceManager->get(ZFNotificationAdapterFactory::class);
                     $factory->setConfig($config);
                     return $factory->createService($serviceManager);
                 }

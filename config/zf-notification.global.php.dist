@@ -1,0 +1,20 @@
+<?php
+
+use JobQueue\Queue\QueuePluginManager;
+use JobQueue\Job\JobPluginManager;
+
+return [
+    'zf-notification' => [
+        'default' => [
+            
+            'enable_queue_manager' => true,
+            'queue_manager' => QueuePluginManager::class,
+            
+            'enable_job_manager' => true,
+            'job_manager' => JobPluginManager::class,
+            
+            'sms_handler' => 'SmsHandler',
+            
+        ],
+    ],
+];
